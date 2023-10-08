@@ -310,6 +310,9 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
             maxTokens: maxTokens,
             temperature: temperature,
             topP: topP,
+            configuration: {
+              baseURL: apiBaseUrl
+            }
           });
         }
 
@@ -343,6 +346,9 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
             maxTokens: maxTokens,
             temperature: temperature,
             topP: topP,
+            configuration: {
+              baseURL: apiBaseUrl
+            }
           });
         }
 
@@ -369,11 +375,10 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
   private processQuestion(question: string, code?: string, language?: string) {
     if (code != null) {
       // Add prompt prefix to the code if there was a code block selected
-      question = `${question}${
-        language
-          ? ` (The following code is in ${language} programming language)`
-          : ""
-      }: ${code}`;
+      question = `${question}${language
+        ? ` (The following code is in ${language} programming language)`
+        : ""
+        }: ${code}`;
     }
     return question + "\r\n";
   }
@@ -522,9 +527,8 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
       this.logError("api-request-failed");
 
       if (error?.response?.status || error?.response?.statusText) {
-        message = `${error?.response?.status || ""} ${
-          error?.response?.statusText || ""
-        }`;
+        message = `${error?.response?.status || ""} ${error?.response?.statusText || ""
+          }`;
 
         vscode.window
           .showErrorMessage(
@@ -598,8 +602,7 @@ export default class ChatGptViewProvider implements vscode.WebviewViewProvider {
     // You can initialize your telemetry reporter and consume it here - *replaced with console.debug to prevent unwanted telemetry logs
     // this.reporter?.sendTelemetryEvent(eventName, { "chatgpt.loginMethod": this.loginMethod!, "chatgpt.authType": this.authType!, "chatgpt.model": this.model || "unknown", ...properties }, { "chatgpt.questionCounter": this.questionCounter });
     logger.appendLine(
-      `INFO ${eventName} chatgpt.model:${this.model} chatgpt.questionCounter:${
-        this.questionCounter
+      `INFO ${eventName} chatgpt.model:${this.model} chatgpt.questionCounter:${this.questionCounter
       } ${JSON.stringify(properties)}`,
     );
   }
